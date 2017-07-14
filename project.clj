@@ -3,7 +3,10 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [google-apps-clj "0.6.1"]
+                 [javax.mail/javax.mail-api "1.6.0-rc2"]
+                 [org.apache.poi/poi "3.16"]]
   :main ^:skip-aot mail-xls-sheets-clj.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
