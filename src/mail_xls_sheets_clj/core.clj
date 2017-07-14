@@ -2,6 +2,7 @@
   (:gen-class))
 
 ;; ; https://github.com/javaee/javamail/blob/cbf47f61945bde02301e2f9ddc4e2c4a1b7fbb72/demo/src/main/java/msgshow.java
+;; enable https://myaccount.google.com/lesssecureapps
 ;; (def s (javax.mail.Session/getInstance (System/getProperties) nil))
 ;; (.setDebug s true)
 ;; (def store (.getStore s "imaps"))
