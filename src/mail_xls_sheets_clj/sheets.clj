@@ -22,14 +22,16 @@
               (.setAccessType "offline")
               .build))
 
-(def cred (.authorize (AuthorizationCodeInstalledApp. flow (LocalServerReceiver.)) "user"))
+(def cred (-> flow
+              (AuthorizationCodeInstalledApp. (LocalServerReceiver.))
+              (.authorize "user")))
 
-(def svc (-> http-transport
-             (Sheets$Builder. json-factory cred)
-             (.setApplicationName "test")
-             .build))
+(def sheets-service (-> http-transport
+                        (Sheets$Builder. json-factory cred)
+                        (.setApplicationName "test")
+                        .build))
 
-(def response (-> svc
+(def response (-> sheets-service
                   .spreadsheets
                   .values
                   (.get "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms" "Class Data!A2:E")
