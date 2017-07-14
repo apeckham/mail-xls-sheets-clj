@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [google-apps-clj "0.6.1"]
-                 [javax.mail/javax.mail-api "1.6.0-rc2"]
+                 [com.sun.mail/javax.mail "1.6.0-rc2"]
                  [org.apache.poi/poi "3.16"]]
   :main ^:skip-aot mail-xls-sheets-clj.core
   :target-path "target/%s"
