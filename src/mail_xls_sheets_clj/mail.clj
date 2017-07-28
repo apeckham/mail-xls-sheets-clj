@@ -5,7 +5,8 @@
 ;; enable https://myaccount.google.com/lesssecureapps
 
 (def session (javax.mail.Session/getInstance (System/getProperties) nil))
-(.setDebug session true)
+
+#_(.setDebug session true)
 
 (def store (.getStore session "imaps"))
 
@@ -17,7 +18,7 @@
 
 (.getMessageCount folder)
 
-(def message (.getMessage folder 2))
+(def message (.getMessage folder 3))
 
 (.getFrom message)
 
@@ -25,8 +26,22 @@
 
 (.getSubject message)
 
+(.getCount (.getContent message))
+
 (.getContentType (.getBodyPart (.getContent message) 0))
 
-(.getDisposition (.getBodyPart (.getContent message) 1))
+(def input-stream (let [body-part (.getBodyPart (.getContent message) 1)]
+                    (.getDisposition body-part)
+                    body-part
+                    #_(.saveFile body-part (java.io.File. "/tmp/x"))
+                    (.getInputStream body-part)))
 
-(.saveFile (.getBodyPart (.getContent message) 1) (java.io.File. "/tmp/x.png"))
+(def zip-input-stream (java.util.zip.ZipInputStream. input-stream))
+
+(def entry (.getNextEntry zip-input-stream))
+
+(def bis (java.io.ByteArrayOutputStream.))
+
+(clojure.java.io/copy zip-input-stream bis)
+
+#_(slurp bis)
