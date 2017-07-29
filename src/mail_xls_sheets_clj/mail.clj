@@ -1,5 +1,5 @@
 (ns mail-xls-sheets-clj.mail
-  (:import javax.mail.Session))
+  (:import [javax.mail Flags$Flag Session]))
 
 ;; ; https://github.com/javaee/javamail/blob/cbf47f61945bde02301e2f9ddc4e2c4a1b7fbb72/demo/src/main/java/msgshow.java
 ;; enable https://myaccount.google.com/lesssecureapps
@@ -14,11 +14,15 @@
 
 (def folder (.getFolder (.getDefaultFolder store) "INBOX"))
 
-(.open folder javax.mail.Folder/READ_ONLY)
+(.open folder javax.mail.Folder/READ_WRITE)
 
 (.getMessageCount folder)
 
-(def message (.getMessage folder 4))
+(def message (.getMessage folder 1))
+
+(comment "archiving in gmail"
+         (.setFlag message Flags$Flag/DELETED true)
+         (.close folder true))
 
 (.getFrom message)
 
