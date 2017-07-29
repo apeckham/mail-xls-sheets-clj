@@ -18,7 +18,7 @@
 
 (.getMessageCount folder)
 
-(def message (.getMessage folder 3))
+(def message (.getMessage folder 4))
 
 (.getFrom message)
 
@@ -30,22 +30,34 @@
 
 (.getContentType (.getBodyPart (.getContent message) 0))
 
-(def input-stream (let [body-part (.getBodyPart (.getContent message) 1)]
-                    (.getDisposition body-part)
-                    body-part
-                    #_(.saveFile body-part (java.io.File. "/tmp/x"))
-                    (.getInputStream body-part)))
+(for [i (range (.getCount (.getContent message)))]
+  (-> message .getContent (.getBodyPart i) .getContentType))
 
-(def zip-input-stream (java.util.zip.ZipInputStream. input-stream))
+(for [i (range (.getCount (.getContent message)))]
+  (-> message .getContent (.getBodyPart i) .getDisposition))
 
-(def entry (.getNextEntry zip-input-stream))
+(def body-part (.getBodyPart (.getContent message) 1))
 
-(def output-stream (java.io.ByteArrayOutputStream.))
+(def is-csv (re-find #"^TEXT/CSV" (.getContentType body-part)))
 
-(time (clojure.java.io/copy zip-input-stream output-stream))
+#_(.saveFile body-part (java.io.File. "/tmp/x"))
 
-(.size output-stream)
+(def input-stream (.getInputStream body-part))
 
-(count (str output-stream))
+(if is-csv
+  (slurp input-stream))
 
-(spit "/tmp/x" (str output-stream))
+(if (not is-csv)
+  (def zip-input-stream (java.util.zip.ZipInputStream. input-stream))
+
+  (def entry (.getNextEntry zip-input-stream))
+
+  (def output-stream (java.io.ByteArrayOutputStream.))
+
+  (time (clojure.java.io/copy zip-input-stream output-stream))
+
+  (.size output-stream)
+
+  (count (str output-stream))
+
+  (spit "/tmp/x" (str output-stream)))
