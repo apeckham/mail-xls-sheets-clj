@@ -40,8 +40,12 @@
 
 (def entry (.getNextEntry zip-input-stream))
 
-(def bis (java.io.ByteArrayOutputStream.))
+(def output-stream (java.io.ByteArrayOutputStream.))
 
-(clojure.java.io/copy zip-input-stream bis)
+(time (clojure.java.io/copy zip-input-stream output-stream))
 
-#_(slurp bis)
+(.size output-stream)
+
+(count (str output-stream))
+
+(spit "/tmp/x" (str output-stream))
